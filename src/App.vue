@@ -21,22 +21,24 @@ html {
 }
 body {
   background: repeating-linear-gradient(
-    45deg,
+    135deg,
     #f2bf30,
-    #f2bf30 1rem,
-    #000000 1rem,
-    #000000 2rem
+    #f2bf30 2rem,
+    #000000 2rem,
+    #000000 4rem
   );
   min-height: 100%;
+  padding: 1rem;
 }
 #app {
   background: #eeeeee;
-  border-radius: 0.5em; /* TODO: Border radius doesn't work? */
-  color: #2c3e50;
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  margin: 3rem;
+  margin: 0 auto;
+  max-width: 80rem;
   text-align: center;
 }
 </style>
+
+// vim: ai ts=2 sts=2 et sw=2
