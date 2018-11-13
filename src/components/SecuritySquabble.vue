@@ -14,7 +14,7 @@
 
       <div>
         <h3>Security Experts' Top Online Safety Practices</h3>
-        <draggable element="span" v-model="list2" :options="dragOptions" :move="onMove">
+        <draggable element="span" v-model="list2" :options="dragOptions2" :move="onMove">
         <transition-group name="no" class="list-group" tag="ul">
           <li class="list-group-item" v-for="element in list2" :key="element.order">
             {{element.name}}
@@ -26,11 +26,12 @@
 
     <div class="instructions">
       <div class="text">
-        Drag and drop five items from the list on the left to the list on the right. Order your five selections by decreasing importance. When you are satisfied, click the "Score" button to see your score. If you want a clean slate, click the "Reset" button.
+        <h4>Instructions:</h4>
+        Drag and drop five items from the list on the left to the list on the right. Order your five selections by decreasing importance (most important at the top). When you are satisfied, click the "Score" button to see your score. If you want a clean slate, click the "Reset" button.
       </div>
       <button type="button" @click="resetLists">Reset</button>
       <button type="button" @click="calcScore" :disabled="score > 0">Score</button>
-      <h1 v-if="score > 0">Your Score: {{score}}</h1>
+      <h1 v-if="score > 0">Your Score: {{score}} out of 25</h1>
     </div>
   </div>
 </template>
@@ -85,7 +86,7 @@ export default {
     calcScore() {
       this.score = 0
       for (var i=0, len=this.list2.length; i < len; i++) {
-        if (this.list2[i].order < 5) {
+        if (this.list2[i].order < 6) {
           this.score += 5 - Math.abs(this.list2[i].order - (i + 1))
         }
       }
@@ -113,7 +114,21 @@ export default {
     dragOptions() {
       return {
         animation: 0,
-        group: "description",
+        group: {
+          name: "Squabble",
+          pull: this.list2.length < 5
+        },
+        disabled: !this.editable,
+        ghostClass: "ghost"
+      };
+    },
+    dragOptions2() {
+      return {
+        animation: 0,
+        group: {
+          name: "Squabble",
+          put: this.list2.length < 5
+        },
         disabled: !this.editable,
         ghostClass: "ghost"
       };
@@ -142,7 +157,8 @@ export default {
 <style>
 button {
   font-weight: bold;
-  margin: 3rem;
+  margin: 1rem;
+  text-transform: uppercase;
 }
 
 h3 {
@@ -151,6 +167,12 @@ h3 {
   color: #000000;
   margin: 0;
   padding: 1rem;
+  text-transform: uppercase;
+}
+
+h4 {
+  margin: 0;
+  padding: 0.5rem 0;
 }
 
 .flip-list-move {
@@ -158,12 +180,12 @@ h3 {
 }
 
 .ghost {
-  opacity: 0.5;
   background: #c8ebfb;
+  opacity: 0.5;
 }
 
 .instructions {
-  padding: 3rem 0;
+  padding: 1rem 0;
 }
 
 .list-group {
@@ -180,6 +202,7 @@ h3 {
   cursor: move;
   margin: 0;
   padding: 1rem 0.5rem;
+  text-transform: uppercase;
 }
 
 .list-group-item i {
@@ -201,7 +224,7 @@ h3 {
 }
 
 .squabble {
-  text-transform: uppercase;
+  background: #eeeeee;
 }
 
 .text {

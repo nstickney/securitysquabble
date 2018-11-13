@@ -20,21 +20,23 @@ html {
   min-height: 100%;
 }
 body {
-  background: repeating-linear-gradient(
-    135deg,
-    #f2bf30,
-    #f2bf30 2rem,
-    #000000 2rem,
-    #000000 4rem
-  );
+  background: #555555;
   min-height: 100%;
   padding: 1rem;
 }
 #app {
-  background: #eeeeee;
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  background: repeating-linear-gradient(
+  135deg,
+  #f2bf30,
+  #f2bf30 2rem,
+  #000000 2rem,
+  #000000 4rem
+  );
+  box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  padding: 1rem;
   margin: 0 auto;
   max-width: 80rem;
   text-align: center;
