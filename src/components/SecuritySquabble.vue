@@ -1,56 +1,58 @@
 <template>
-  <div class="squabble">
-    <div class="row">
-      <div>
-        <h3>Questionable Online Security Advice</h3>
-        <draggable class="list-group force-height" element="ul" v-model="list" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
-        <transition-group type="transition" :name="'flip-list'">
-          <li class="list-group-item" v-for="element in list" :key="element.order">
-            {{element.name}}
-          </li>
-        </transition-group>
-        </draggable>
-      </div>
-
-      <div>
-        <h3>Top Online Safety Practices</h3>
-        <draggable element="span" v-model="list2" :options="dragOptions2" :move="onMove">
-        <transition-group name="no" class="list-group force-height" tag="ul">
-          <li class="list-group-item" v-for="element in list2" :key="element.order">
-            {{element.name}}
-          </li>
-        </transition-group>
-        </draggable>
-      </div>
-    </div>
-
-    <div class="instructions">
-      <h4>Instructions:</h4>
-      <p>Drag and drop five items from the <em>Questionable Online Security Advice</em> list to the <em>Top Online Safety Practices</em> list. Order your five selections by decreasing importance (most important at the top). When you are satisfied, click the "Score" button to see your score. If you want a clean slate, click the "Reset" button.</p>
-    </div>
-    <div class="buttons">
-      <button type="button" @click="resetLists">Reset</button>
-      <button type="button" @click="calcScore" :disabled="!scoreable">Score</button>
-    </div>
-
-    <div class="overlay" v-if="score > 0">
+  <div class="app">
+    <div class="squabble">
       <div class="row">
         <div>
-          <h4>Your Score:</h4>
-          <h3>{{score}} out of 25</h3>
-          <p>For more information, check out the <a href="https://security.googleblog.com/2015/07/new-research-comparing-how-security.html">Google Security blog post</a> that inspired this game.</p>
-        </div>
-        <div>
-          <h3>Security Experts' Top Online Safety Practices</h3>
-          <ul class="list-group">
-            <li class="list-group-item" v-for="element in experts" :key="element.index">
+          <h3>Questionable Online Security Advice</h3>
+          <draggable class="list-group force-height" element="ul" v-model="list" :options="dragOptions" @start="isDragging=true" @end="isDragging=false">
+          <transition-group type="transition" :name="'flip-list'">
+            <li class="list-group-item" v-for="element in list" :key="element.order">
               {{element.name}}
             </li>
-          </ul>
+          </transition-group>
+          </draggable>
+        </div>
+
+        <div>
+          <h3>Top Online Safety Practices</h3>
+          <draggable element="span" v-model="list2" :options="dragOptions2">
+          <transition-group name="no" class="list-group force-height" tag="ul">
+            <li class="list-group-item" v-for="element in list2" :key="element.order">
+              {{element.name}}
+            </li>
+          </transition-group>
+          </draggable>
         </div>
       </div>
+
+      <div class="instructions">
+        <h4>Instructions:</h4>
+        <p>Drag and drop five items from the <em>Questionable Online Security Advice</em> list to the <em>Top Online Safety Practices</em> list. Order your five selections by decreasing importance (most important at the top). When you are satisfied, click the "Score" button to see your score. If you want a clean slate, click the "Reset" button.</p>
+      </div>
       <div class="buttons">
-        <button type="button" @click="resetLists">Play Again</button>
+        <button type="button" @click="resetLists">Reset</button>
+        <button type="button" @click="calcScore" :disabled="!scoreable">Score</button>
+      </div>
+
+      <div class="overlay" v-if="score > 0">
+        <div class="row">
+          <div>
+            <h4>Your Score:</h4>
+            <h3>{{score}} out of 25</h3>
+            <p>For more information, check out the <a href="https://security.googleblog.com/2015/07/new-research-comparing-how-security.html">Google Security blog post</a> that inspired this game.</p>
+          </div>
+          <div>
+            <h3>Security Experts' Top Online Safety Practices</h3>
+            <ul class="list-group">
+              <li class="list-group-item" v-for="element in experts" :key="element.order">
+                {{element.name}}
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="buttons">
+          <button type="button" @click="resetLists">Play Again</button>
+        </div>
       </div>
     </div>
   </div>
@@ -95,11 +97,11 @@ export default {
   data() {
     return {
       list: correct.concat(incorrect).map((name, index) => {
-        return { name, order: index + 1, fixed: false };
+        return { name, order: index + 1 };
       }),
       list2: [],
       experts: correct.map((name, index) => {
-        return { name, index };
+        return { name, order: index + 1 };
       }),
       editable: true,
       isDragging: false,
@@ -116,17 +118,10 @@ export default {
         }
       }
     },
-    onMove({ relatedContext, draggedContext }) {
-      const relatedElement = relatedContext.element;
-      const draggedElement = draggedContext.element;
-      return (
-              (!relatedElement || !relatedElement.fixed) && !draggedElement.fixed
-      );
-    },
     resetLists() {
       this.score = 0
       this.list = correct.concat(incorrect).map((name, index) => {
-        return { name, order: index + 1, fixed: false };
+        return { name, order: index + 1 };
       })
       this.list2 = [];
       fisherYates(this.list);
@@ -160,12 +155,6 @@ export default {
     },
     scoreable() {
       return this.score == 0 && this.list2.length == 5;
-    },
-    listString() {
-      return JSON.stringify(this.list, null, 2);
-    },
-    list2String() {
-      return JSON.stringify(this.list2, null, 2);
     }
   },
   watch: {
@@ -207,12 +196,27 @@ h3 {
 }
 
 h4 {
-  padding: 0.5rem 0;
+  padding: 0.5rem 0 0.25rem;
+  text-transform: uppercase;
 }
 
 p {
-  padding: 0.5rem 0;
+  padding: 0.25rem 0 0.5rem;
   text-indent: 2rem;
+}
+
+.app {
+  background: repeating-linear-gradient(
+  135deg,
+  #f2bf30,
+  #f2bf30 2rem,
+  black 2rem,
+  black 4rem
+  );
+  box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem;
+  padding: 1rem;
+  margin: 0 auto;
+  max-width: 64rem;
 }
 
 .buttons {
@@ -267,8 +271,7 @@ p {
   background: rgba(238, 238, 238, 0.95);
   height: 100%;
   left: 0;
-  padding: 6rem 0;
-  position: fixed;
+  position: absolute;
   width: 100%;
   top: 0px;
   z-index: 1000;
@@ -298,11 +301,12 @@ p {
 
 .squabble {
   background: #eee;
+  position: relative;
 }
 
 @media only screen and (min-width: 768px) {
   .force-height {
-    height: 504px;
+    height: calc(31rem + 7px);
     margin-top: -2px;
   }
   .row > div {

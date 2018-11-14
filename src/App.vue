@@ -1,7 +1,5 @@
 <template>
-  <div id="app">
-    <SecuritySquabble msg="Welcome to Your Vue.js App"/>
-  </div>
+  <SecuritySquabble />
 </template>
 
 <script>
@@ -21,25 +19,12 @@ html {
 }
 body {
   background: #555;
-  margin: 0;
-  min-height: 100%;
-  padding: 1rem;
-}
-#app {
-  background: repeating-linear-gradient(
-  135deg,
-  #f2bf30,
-  #f2bf30 2rem,
-  black 2rem,
-  black 4rem
-  );
-  box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  min-height: 100%;
   padding: 1rem;
-  margin: 0 auto;
-  max-width: 64rem;
 }
 </style>
 
