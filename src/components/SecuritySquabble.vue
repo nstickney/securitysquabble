@@ -3,7 +3,7 @@
     <div class="row">
       <div>
         <h3>Questionable Online Security Advice</h3>
-        <draggable class="list-group" element="ul" v-model="list" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
+        <draggable class="list-group force-height" element="ul" v-model="list" :options="dragOptions" :move="onMove" @start="isDragging=true" @end="isDragging=false">
         <transition-group type="transition" :name="'flip-list'">
           <li class="list-group-item" v-for="element in list" :key="element.order">
             {{element.name}}
@@ -13,9 +13,9 @@
       </div>
 
       <div>
-        <h3>Security Experts' Top Online Safety Practices</h3>
+        <h3>Top Online Safety Practices</h3>
         <draggable element="span" v-model="list2" :options="dragOptions2" :move="onMove">
-        <transition-group name="no" class="list-group" tag="ul">
+        <transition-group name="no" class="list-group force-height" tag="ul">
           <li class="list-group-item" v-for="element in list2" :key="element.order">
             {{element.name}}
           </li>
@@ -26,11 +26,33 @@
 
     <div class="instructions">
       <h4>Instructions:</h4>
-      Drag and drop five items from the <em>Questionable Online Security Advice</em> list to the <em>Security Experts' Top Online Safety Practices</em> list. Order your five selections by decreasing importance (most important at the top). When you are satisfied, click the "Score" button to see your score. If you want a clean slate, click the "Reset" button.
+      <p>Drag and drop five items from the <em>Questionable Online Security Advice</em> list to the <em>Top Online Safety Practices</em> list. Order your five selections by decreasing importance (most important at the top). When you are satisfied, click the "Score" button to see your score. If you want a clean slate, click the "Reset" button.</p>
     </div>
-    <button type="button" @click="resetLists">Reset</button>
-    <button type="button" @click="calcScore" :disabled="!scoreable">Score</button>
-    <h1 v-if="score > 0">Score: {{score}} out of 25</h1>
+    <div class="buttons">
+      <button type="button" @click="resetLists">Reset</button>
+      <button type="button" @click="calcScore" :disabled="!scoreable">Score</button>
+    </div>
+
+    <div class="overlay" v-if="score > 0">
+      <div class="row">
+        <div>
+          <h4>Your Score:</h4>
+          <h3>{{score}} out of 25</h3>
+          <p>For more information, check out the <a href="https://security.googleblog.com/2015/07/new-research-comparing-how-security.html">Google Security blog post</a> that inspired this game.</p>
+        </div>
+        <div>
+          <h3>Security Experts' Top Online Safety Practices</h3>
+          <ul class="list-group">
+            <li class="list-group-item" v-for="element in experts" :key="element.index">
+              {{element.name}}
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="buttons">
+        <button type="button" @click="resetLists">Play Again</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -38,12 +60,14 @@
 import draggable from "vuedraggable";
 
 // https://security.googleblog.com/2015/07/new-research-comparing-how-security.html
-const message = [
+const correct = [
   "Install software updates",
   "Use unique passwords",
   "Use two-factor authentication",
   "Use strong passwords",
-  "Use a password manager",
+  "Use a password manager"
+];
+const incorrect = [
   "Use antivirus software",
   "Change passwords frequently",
   "Only visit websites you know",
@@ -70,10 +94,13 @@ export default {
   },
   data() {
     return {
-      list: message.map((name, index) => {
+      list: correct.concat(incorrect).map((name, index) => {
         return { name, order: index + 1, fixed: false };
       }),
       list2: [],
+      experts: correct.map((name, index) => {
+        return { name, index };
+      }),
       editable: true,
       isDragging: false,
       delayedDragging: false,
@@ -98,7 +125,7 @@ export default {
     },
     resetLists() {
       this.score = 0
-      this.list = message.map((name, index) => {
+      this.list = correct.concat(incorrect).map((name, index) => {
         return { name, order: index + 1, fixed: false };
       })
       this.list2 = [];
@@ -167,10 +194,6 @@ button {
   text-transform: uppercase;
 }
 
-h1 {
-  padding: 0 1rem 1rem;
-}
-
 h3 {
   align-items: center;
   background: #f2bf30;
@@ -179,6 +202,7 @@ h3 {
   justify-content: center;
   min-height: 4em;
   padding: 0 1rem;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -186,8 +210,21 @@ h4 {
   padding: 0.5rem 0;
 }
 
+p {
+  padding: 0.5rem 0;
+  text-indent: 2rem;
+}
+
+.buttons {
+  text-align: center;
+}
+
 .flip-list-move {
   transition: transform 0.5s;
+}
+
+.force-height {
+  min-height: 3rem;
 }
 
 .ghost {
@@ -199,7 +236,6 @@ h4 {
   padding: 0 1rem;
   margin: 0 auto;
   max-width: 35em;
-  text-align: left;
 }
 
 .list-group {
@@ -207,14 +243,15 @@ h4 {
   border-right: 2px dashed black;
   border-bottom: 2px dashed black;
   list-style: none;
-  min-height: 3rem;
 }
 
 .list-group-item {
+  background: #eee;
   border: 2px solid black;
   cursor: move;
   margin: -2px;
   padding: 1rem 0.5rem;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -226,7 +263,24 @@ h4 {
   transition: transform 0s;
 }
 
+.overlay {
+  background: rgba(238, 238, 238, 0.95);
+  height: 100%;
+  left: 0;
+  padding: 6rem 0;
+  position: fixed;
+  width: 100%;
+  top: 0px;
+  z-index: 1000;
+}
+
+.overlay > div {
+  margin: 0 auto;
+  max-width: 64rem;
+}
+
 .row {
+  margin: 0 auto;
   padding: 0.5rem;
 }
 
@@ -243,11 +297,11 @@ h4 {
 }
 
 .squabble {
-  background: #eeeeee;
+  background: #eee;
 }
 
 @media only screen and (min-width: 768px) {
-  .list-group {
+  .force-height {
     height: 504px;
     margin-top: -2px;
   }

@@ -20,7 +20,7 @@ html {
   min-height: 100%;
 }
 body {
-  background: #555555;
+  background: #555;
   margin: 0;
   min-height: 100%;
   padding: 1rem;
@@ -30,8 +30,8 @@ body {
   135deg,
   #f2bf30,
   #f2bf30 2rem,
-  #000000 2rem,
-  #000000 4rem
+  black 2rem,
+  black 4rem
   );
   box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem;
   font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif;
@@ -40,7 +40,6 @@ body {
   padding: 1rem;
   margin: 0 auto;
   max-width: 64rem;
-  text-align: center;
 }
 </style>
 
