@@ -3,22 +3,24 @@
     <div class="squabble">
       <div class="row">
         <div>
-          <h3>Questionable Online Security Advice</h3>
+          <h3 class="flex">Questionable Online Security Advice</h3>
           <draggable class="list-group force-height" element="ul" v-model="list" :options="dragOptions" @start="isDragging=true" @end="isDragging=false">
           <transition-group type="transition" :name="'flip-list'">
             <li class="list-group-item" v-for="element in list" :key="element.order">
-              {{element.name}}
+              <img :src="element.order + '.jpg'" />
+              <div>{{element.name}}</div>
             </li>
           </transition-group>
           </draggable>
         </div>
 
         <div>
-          <h3>Top Online Safety Practices</h3>
+          <h3 class="flex">Top Online Safety Practices</h3>
           <draggable element="span" v-model="list2" :options="dragOptions2">
           <transition-group name="no" class="list-group force-height" tag="ul">
             <li class="list-group-item" v-for="element in list2" :key="element.order">
-              {{element.name}}
+              <img :src="element.order + '.jpg'" />
+              <div>{{element.name}}</div>
             </li>
           </transition-group>
           </draggable>
@@ -38,19 +40,20 @@
         <div class="row">
           <div>
             <h4>Your Score:</h4>
-            <h3>{{score}} out of 25</h3>
+            <h3 class="flex">{{score}} out of 25</h3>
             <p>For more information, check out the <a href="https://security.googleblog.com/2015/07/new-research-comparing-how-security.html">Google Security blog post</a> that inspired this game.</p>
           </div>
           <div>
-            <h3>Security Experts' Top Online Safety Practices</h3>
+            <h3 class="flex">Security Experts' Top Online Safety Practices</h3>
             <ul class="list-group">
               <li class="list-group-item" v-for="element in experts" :key="element.order">
-                {{element.name}}
+                <img :src="element.order + '.jpg'" />
+                <div>{{element.name}}</div>
               </li>
             </ul>
           </div>
         </div>
-        <div class="buttons">
+        <div class="buttons flex">
           <button type="button" @click="resetLists">Play Again</button>
         </div>
       </div>
@@ -184,14 +187,10 @@ button {
 }
 
 h3 {
-  align-items: center;
   background: #f2bf30;
   border: 2px solid black;
-  display: flex;
-  justify-content: center;
   min-height: 4em;
   padding: 0 1rem;
-  text-align: center;
   text-transform: uppercase;
 }
 
@@ -223,12 +222,18 @@ p {
   text-align: center;
 }
 
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .flip-list-move {
   transition: transform 0.5s;
 }
 
 .force-height {
-  min-height: 3rem;
+  min-height: 90px;
 }
 
 .ghost {
@@ -237,9 +242,9 @@ p {
 }
 
 .instructions {
-  padding: 0 1rem;
   margin: 0 auto;
-  max-width: 35em;
+  max-width: 36rem;
+  padding: 0 1rem;
 }
 
 .list-group {
@@ -254,13 +259,31 @@ p {
   border: 2px solid black;
   cursor: move;
   margin: -2px;
-  padding: 1rem 0.5rem;
-  text-align: center;
   text-transform: uppercase;
 }
 
 .list-group-item i {
   cursor: pointer;
+}
+
+.list-group-item > img {
+  float: left;
+  height: 3rem;
+}
+
+.list-group-item > div {
+  align-items: center;
+  display: flex;
+  height: 3rem;
+  padding: 0 1rem;
+  text-align: center;
+  width: calc(100% - 5rem);
+}
+
+.list-group-item::after {
+  clear: both;
+  content: "";
+  display: table;
 }
 
 .no-move {
@@ -306,7 +329,7 @@ p {
 
 @media only screen and (min-width: 768px) {
   .force-height {
-    height: calc(31rem + 7px);
+    height: calc(27rem + 18px);
     margin-top: -2px;
   }
   .row > div {
