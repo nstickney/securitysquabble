@@ -191,6 +191,7 @@ h3 {
   border: 2px solid black;
   min-height: 4em;
   padding: 0 1rem;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -199,9 +200,47 @@ h4 {
   text-transform: uppercase;
 }
 
+li {
+  background: #eee;
+  border: 2px solid black;
+  cursor: move;
+  margin: -2px;
+  text-transform: uppercase;
+}
+
+li i {
+  cursor: pointer;
+}
+
+li > img {
+  float: left;
+  height: 3rem;
+}
+
+li > div {
+  align-items: center;
+  display: flex;
+  height: 3rem;
+  padding: 0 1rem;
+  width: calc(100% - 5rem);
+}
+
+li::after {
+  clear: both;
+  content: "";
+  display: table;
+}
+
 p {
   padding: 0.25rem 0 0.5rem;
   text-indent: 2rem;
+}
+
+ul {
+  border-left: 2px dashed black;
+  border-right: 2px dashed black;
+  border-bottom: 2px dashed black;
+  list-style: none;
 }
 
 .app {
@@ -212,7 +251,7 @@ p {
   black 2rem,
   black 4rem
   );
-  box-shadow: 0.1rem 0.1rem 0.1rem 0.1rem;
+  box-shadow: 0.2rem 0.2rem 0.1rem 0.1rem;
   padding: 1rem;
   margin: 0 auto;
   max-width: 64rem;
@@ -233,7 +272,7 @@ p {
 }
 
 .force-height {
-  min-height: 90px;
+  min-height: 10rem;
 }
 
 .ghost {
@@ -245,45 +284,6 @@ p {
   margin: 0 auto;
   max-width: 36rem;
   padding: 0 1rem;
-}
-
-.list-group {
-  border-left: 2px dashed black;
-  border-right: 2px dashed black;
-  border-bottom: 2px dashed black;
-  list-style: none;
-}
-
-.list-group-item {
-  background: #eee;
-  border: 2px solid black;
-  cursor: move;
-  margin: -2px;
-  text-transform: uppercase;
-}
-
-.list-group-item i {
-  cursor: pointer;
-}
-
-.list-group-item > img {
-  float: left;
-  height: 3rem;
-}
-
-.list-group-item > div {
-  align-items: center;
-  display: flex;
-  height: 3rem;
-  padding: 0 1rem;
-  text-align: center;
-  width: calc(100% - 5rem);
-}
-
-.list-group-item::after {
-  clear: both;
-  content: "";
-  display: table;
 }
 
 .no-move {
