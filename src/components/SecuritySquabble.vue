@@ -25,14 +25,12 @@
     </div>
 
     <div class="instructions">
-      <div class="text">
-        <h4>Instructions:</h4>
-        Drag and drop five items from the list on the left to the list on the right. Order your five selections by decreasing importance (most important at the top). When you are satisfied, click the "Score" button to see your score. If you want a clean slate, click the "Reset" button.
-      </div>
-      <button type="button" @click="resetLists">Reset</button>
-      <button type="button" @click="calcScore" :disabled="score > 0">Score</button>
-      <h1 v-if="score > 0">Your Score: {{score}} out of 25</h1>
+      <h4>Instructions:</h4>
+      Drag and drop five items from the <em>Questionable Online Security Advice</em> list to the <em>Security Experts' Top Online Safety Practices</em> list. Order your five selections by decreasing importance (most important at the top). When you are satisfied, click the "Score" button to see your score. If you want a clean slate, click the "Reset" button.
     </div>
+    <button type="button" @click="resetLists">Reset</button>
+    <button type="button" @click="calcScore" :disabled="!scoreable">Score</button>
+    <h1 v-if="score > 0">Score: {{score}} out of 25</h1>
   </div>
 </template>
 
@@ -103,8 +101,8 @@ export default {
       this.list = message.map((name, index) => {
         return { name, order: index + 1, fixed: false };
       })
-      this.list2 = []
-      fisherYates(this.list)
+      this.list2 = [];
+      fisherYates(this.list);
     }
   },
   beforeMount() {
@@ -133,6 +131,9 @@ export default {
         ghostClass: "ghost"
       };
     },
+    scoreable() {
+      return this.score == 0 && this.list2.length == 5;
+    },
     listString() {
       return JSON.stringify(this.list, null, 2);
     },
@@ -155,23 +156,33 @@ export default {
 </script>
 
 <style>
+* {
+  margin: 0;
+  padding: 0;
+}
+
 button {
   font-weight: bold;
   margin: 1rem;
   text-transform: uppercase;
 }
 
+h1 {
+  padding: 0 1rem 1rem;
+}
+
 h3 {
+  align-items: center;
   background: #f2bf30;
   border: 2px solid black;
-  color: #000000;
-  margin: 0;
-  padding: 1rem;
+  display: flex;
+  justify-content: center;
+  min-height: 4em;
+  padding: 0 1rem;
   text-transform: uppercase;
 }
 
 h4 {
-  margin: 0;
   padding: 0.5rem 0;
 }
 
@@ -185,22 +196,24 @@ h4 {
 }
 
 .instructions {
-  padding: 1rem 0;
+  padding: 0 1rem;
+  margin: 0 auto;
+  max-width: 35em;
+  text-align: left;
 }
 
 .list-group {
+  border-left: 2px dashed black;
+  border-right: 2px dashed black;
+  border-bottom: 2px dashed black;
   list-style: none;
-  margin: 0;
-  min-height: 29.25rem;
-  padding: 0;
+  min-height: 3rem;
 }
 
 .list-group-item {
-  border-left: 2px solid black;
-  border-right: 2px solid black;
-  border-bottom: 2px solid black;
+  border: 2px solid black;
   cursor: move;
-  margin: 0;
+  margin: -2px;
   padding: 1rem 0.5rem;
   text-transform: uppercase;
 }
@@ -214,25 +227,34 @@ h4 {
 }
 
 .row {
-  display: flex;
+  padding: 0.5rem;
+}
+
+.row::after {
+  content: "";
+  clear: both;
+  display: table;
 }
 
 .row > div {
-  background: #eeeeee;
-  flex: 50%;
-  margin: 1rem;
+  float: left;
+  margin: 0.5rem;
+  width: calc(100% - 1rem);
 }
 
 .squabble {
   background: #eeeeee;
 }
 
-.text {
-  margin: 0 auto;
-  max-width: 40em;
-  text-align: left;
+@media only screen and (min-width: 768px) {
+  .list-group {
+    height: 504px;
+    margin-top: -2px;
+  }
+  .row > div {
+    width: calc(50% - 1rem);
+  }
 }
-
 </style>
 
 // vim: ai ts=2 sts=2 et sw=2

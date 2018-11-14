@@ -21,6 +21,7 @@ html {
 }
 body {
   background: #555555;
+  margin: 0;
   min-height: 100%;
   padding: 1rem;
 }
@@ -38,7 +39,7 @@ body {
   -moz-osx-font-smoothing: grayscale;
   padding: 1rem;
   margin: 0 auto;
-  max-width: 80rem;
+  max-width: 64rem;
   text-align: center;
 }
 </style>
