@@ -18,7 +18,19 @@
 
 The game is based on a [Google Security blog post](https://security.googleblog.com/2015/07/new-research-comparing-how-security.html) which lists the "Top 5" security practices from both experts and non-experts.
 
+![Screenshot](squabble.jpg)
+
 ## Usage
+
+### Development
+
+```bash
+# npm install --global vue-cli
+$ npm install
+$ npm run serve
+```
+
+### Deployment
 
 ```bash
 # npm install --global vue-cli
