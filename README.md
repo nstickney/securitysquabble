@@ -20,7 +20,13 @@ The game is based on a [Google Security blog post](https://security.googleblog.c
 
 ## Usage
 
-TBP.
+```bash
+# npm install --global vue-cli
+$ npm install
+$ npm run build
+```
+
+Deploy the `dist` folder as desired for your platform; more instructions are available from the [vue-cli guide](https://cli.vuejs.org/guide/deployment.html).
 
 ## Contribute
 
