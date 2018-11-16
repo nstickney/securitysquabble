@@ -25,7 +25,7 @@ The game is based on a [Google Security blog post](https://security.googleblog.c
 ### Development
 
 ```bash
-# npm install --global vue-cli
+# npm install --global @vue/cli
 $ npm install
 $ npm run serve
 ```
@@ -33,12 +33,15 @@ $ npm run serve
 ### Deployment
 
 ```bash
-# npm install --global vue-cli
+# npm install --global @vue/cli
 $ npm install
+```
+*Note*: You must set the [production `baseUrl` in `vue.config.js`](https://cli.vuejs.org/config/#baseurl) (defaults to `/squabble/`).
+```
 $ npm run build
 ```
 
-Deploy the `dist` folder as desired for your platform; more instructions are available from the [vue-cli guide](https://cli.vuejs.org/guide/deployment.html).
+Deploy the `dist` folder as desired for your platform; more instructions are available from the [@vue/cli guide](https://cli.vuejs.org/guide/deployment.html).
 
 ## Contribute
 
