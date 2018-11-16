@@ -16,7 +16,7 @@
 [Family Feud](https://en.wikipedia.org/wiki/Family_Feud) is a game show where contestants attempt to name the most popular answers to humorous questions. **Security Squabble** is a single-question version of the game which asks players just one question:
 > According to security experts, what are the most important ways to protect yourself online?
 
-The game is based on a [Google Security blog post](https://security.googleblog.com/2015/07/new-research-comparing-how-security.html) which lists the "Top 5" security practices from both experts and non-experts.
+The game is based on a [Google Security blog post](https://security.googleblog.com/2015/07/new-research-comparing-how-security.html) which lists the "Top 5" security practices from both experts and non-experts. You can play a live version at [stma.is/squabble](https://stma.is/squabble).
 
 ![Screenshot](squabble.jpg)
 
