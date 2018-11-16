@@ -35,6 +35,9 @@
         <button type="button" @click="resetLists">Reset</button>
         <button type="button" @click="calcScore" :disabled="!scoreable">Score</button>
       </div>
+      <div class="buttons">
+        See the code on <a href="https://github.com/nstickney/securitysquabble">GitHub</a>.
+      </div>
 
       <div class="overlay" v-if="score > 0">
         <div class="row">
