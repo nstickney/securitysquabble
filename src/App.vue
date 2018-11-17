@@ -24,7 +24,12 @@ body {
   -moz-osx-font-smoothing: grayscale;
   margin: 0;
   min-height: 100%;
-  padding: 1rem;
+  padding: 0;
+}
+@media only screen and (min-width: 768px) {
+  body {
+    padding: 1rem;
+  }
 }
 </style>
 
