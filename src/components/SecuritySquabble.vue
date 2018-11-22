@@ -75,6 +75,13 @@ const correct = [
   "Use strong passwords",
   "Use a password manager"
 ];
+const links = [
+  "",
+  "https://haveibeenpwned.com/Passwords",
+  "https://www.troyhunt.com/beyond-passwords-2fa-u2f-and-google-advanced-protection/",
+  "",
+  ""
+];
 const incorrect = [
   "Use antivirus software",
   "Change passwords frequently",
