@@ -36,7 +36,7 @@
         <button type="button" @click="calcScore" :disabled="!scoreable">Score</button>
       </div>
       <div class="buttons">
-        See the code on <a href="https://github.com/nstickney/securitysquabble">GitHub</a>.
+        See the code on <a href="https://gitlab.com/nstickney/securitysquabble">GitLab</a>.
       </div>
 
       <div class="overlay" v-if="score > 0">
@@ -44,14 +44,14 @@
           <div>
             <h4>Your Score:</h4>
             <h3 class="flex">{{score}} out of 25</h3>
-            <p>For more information, check out the <a href="https://security.googleblog.com/2015/07/new-research-comparing-how-security.html">Google Security blog post</a> that inspired this game.</p>
+            <p>For more information, check out the <a href="https://security.googleblog.com/2015/07/new-research-comparing-how-security.html">Google Security blog post</a> that inspired this game, or <a href="https://www.us-cert.gov/ncas/tips/ST04-003">this article</a> from the United States Computer Emergency Readiness Team (US-CERT)'s <a href="https://www.us-cert.gov/ncas/tips">tips list</a>. You can also click on any of the advice in the <em>Security Experts' Top Online Safety Practices</em> chart to learn more about that topic.</p>
           </div>
           <div>
             <h3 class="flex">Security Experts' Top Online Safety Practices</h3>
             <ul class="list-group">
               <li class="list-group-item" v-for="element in experts" :key="element.order">
                 <img :src="element.order + '.jpg'" />
-                <div>{{element.name}}</div>
+                <div><a v-bind:href="element.link">{{element.name}}</a></div>
               </li>
             </ul>
           </div>
@@ -76,11 +76,11 @@ const correct = [
   "Use a password manager"
 ];
 const links = [
-  "",
+  "https://www.us-cert.gov/ncas/tips/ST04-006",
   "https://haveibeenpwned.com/Passwords",
-  "https://www.troyhunt.com/beyond-passwords-2fa-u2f-and-google-advanced-protection/",
-  "",
-  ""
+  "https://twofactorauth.org/",
+  "https://explainxkcd.com/wiki/index.php/936:_Password_Strength",
+  "https://www.theverge.com/2017/7/24/15921282/best-password-manager-1password-lastpass-dashlane-how-to"
 ];
 const incorrect = [
   "Use antivirus software",
@@ -114,7 +114,7 @@ export default {
       }),
       list2: [],
       experts: correct.map((name, index) => {
-        return { name, order: index + 1 };
+        return { name, order: index + 1, link: links[index] };
       }),
       editable: true,
       isDragging: false,
@@ -186,8 +186,19 @@ export default {
 
 <style>
 * {
+  color: #111;
   margin: 0;
   padding: 0;
+}
+
+a, a:visited {
+  color: #3131f2;
+  text-decoration: none;
+}
+
+a:hover {
+  color: #3161f2;
+  text-decoration: underline;
 }
 
 button {
@@ -222,9 +233,8 @@ li i {
   cursor: pointer;
 }
 
-li > img {
-  float: left;
-  height: 3rem;
+li:hover {
+  background: #fff;
 }
 
 li > div {
@@ -235,6 +245,15 @@ li > div {
   width: calc(100% - 5rem);
 }
 
+li a, li a:hover, li a:visited {
+  color: #111;
+  text-decoration: none;
+}
+
+li > img {
+  float: left;
+  height: 3rem;
+}
 li::after {
   clear: both;
   content: "";
