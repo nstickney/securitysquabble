@@ -7,7 +7,7 @@
           <draggable class="list-group force-height" element="ul" v-model="list" :options="dragOptions" @start="isDragging=true" @end="isDragging=false">
           <transition-group type="transition" :name="'flip-list'">
             <li class="list-group-item" v-for="element in list" :key="element.order">
-              <img :src="element.order + '.jpg'" />
+              <img :src="'/images/' + element.order + '.jpg'" />
               <div>{{element.name}}</div>
             </li>
           </transition-group>
@@ -19,7 +19,7 @@
           <draggable element="span" v-model="list2" :options="dragOptions2">
           <transition-group name="no" class="list-group force-height" tag="ul">
             <li class="list-group-item" v-for="element in list2" :key="element.order">
-              <img :src="element.order + '.jpg'" />
+              <img :src="'/images/' + element.order + '.jpg'" />
               <div>{{element.name}}</div>
             </li>
           </transition-group>
@@ -50,7 +50,7 @@
             <h3 class="flex">Security Experts' Top Online Safety Practices</h3>
             <ul class="list-group">
               <li class="list-group-item" v-for="element in experts" :key="element.order">
-                <img :src="element.order + '.jpg'" />
+                <img :src="'/images/' + element.order + '.jpg'" />
                 <div><a v-bind:href="element.link">{{element.name}}</a></div>
               </li>
             </ul>
