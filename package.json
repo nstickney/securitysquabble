@@ -13,17 +13,17 @@
   "dependencies": {
     "lodash": "^4.17.15",
     "lodash.defaultsdeep": "^4.6.1",
-    "vue": "^2.6.10",
+    "vue": "^2.6.11",
     "vuedraggable": "^2.23.0"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.12.1",
     "@vue/cli-plugin-eslint": "^3.12.1",
     "@vue/cli-service": "^3.12.1",
-    "babel-eslint": "^10.0.3",
+    "babel-eslint": "^10.1.0",
     "eslint": "^5.16.0",
     "eslint-plugin-vue": "^5.2.3",
-    "vue-template-compiler": "^2.6.10"
+    "vue-template-compiler": "^2.6.11"
   },
   "eslintConfig": {
     "root": true,
