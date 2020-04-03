@@ -36,7 +36,7 @@
         <button type="button" @click="calcScore" :disabled="!scoreable">Score</button>
       </div>
       <div class="buttons">
-        See the code on <a href="https://gitlab.com/nstickney/securitysquabble">GitLab</a>.
+        See the code on <a href="https://git.sr.ht/~stick/squabble">SourceHut</a>.
       </div>
 
       <div class="overlay" v-if="score > 0">
