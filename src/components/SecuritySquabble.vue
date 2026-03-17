@@ -4,25 +4,41 @@
       <div class="row">
         <div>
           <h3 class="flex">Questionable Online Security Advice</h3>
-          <draggable class="list-group force-height" element="ul" v-model="list" :options="dragOptions" @start="isDragging=true" @end="isDragging=false">
-          <transition-group type="transition" :name="'flip-list'">
-            <li class="list-group-item" v-for="element in list" :key="element.order">
-              <img :src="'images/' + element.order + '.jpg'" />
-              <div>{{element.name}}</div>
-            </li>
-          </transition-group>
+          <draggable
+            class="list-group force-height"
+            tag="ul"
+            v-model="choices"
+            :group="{ name: 'Squabble', pull: answers.length < 5 }"
+            :animation="0"
+            ghost-class="ghost"
+            item-key="order"
+          >
+            <template #item="{ element }">
+              <li class="list-group-item">
+                <img :src="'images/' + element.order + '.jpg'" />
+                <div>{{ element.name }}</div>
+              </li>
+            </template>
           </draggable>
         </div>
 
         <div>
           <h3 class="flex">Top Online Safety Practices</h3>
-          <draggable element="span" v-model="list2" :options="dragOptions2">
-          <transition-group name="no" class="list-group force-height" tag="ul">
-            <li class="list-group-item" v-for="element in list2" :key="element.order">
-              <img :src="'images/' + element.order + '.jpg'" />
-              <div>{{element.name}}</div>
-            </li>
-          </transition-group>
+          <draggable
+            class="list-group force-height"
+            tag="ul"
+            v-model="answers"
+            :group="{ name: 'Squabble', put: answers.length < 5 }"
+            :animation="0"
+            ghost-class="ghost"
+            item-key="order"
+          >
+            <template #item="{ element }">
+              <li class="list-group-item">
+                <img :src="'images/' + element.order + '.jpg'" />
+                <div>{{ element.name }}</div>
+              </li>
+            </template>
           </draggable>
         </div>
       </div>
@@ -32,32 +48,32 @@
         <p>Drag and drop five items from the <em>Questionable Online Security Advice</em> list to the <em>Top Online Safety Practices</em> list. Order your five selections by decreasing importance (most important at the top). When you are satisfied, click the "Score" button to see your score. If you want a clean slate, click the "Reset" button.</p>
       </div>
       <div class="buttons">
-        <button type="button" @click="resetLists">Reset</button>
-        <button type="button" @click="calcScore" :disabled="!scoreable">Score</button>
+        <button type="button" @click="reset">Reset</button>
+        <button type="button" @click="submitScore" :disabled="!scoreable">Score</button>
       </div>
       <div class="buttons">
         See the code on <a href="https://git.sr.ht/~stick/squabble">SourceHut</a>.
       </div>
 
-      <div class="overlay" v-if="score > 0">
+      <div class="overlay" v-if="scored">
         <div class="row">
           <div>
             <h4>Your Score:</h4>
-            <h3 class="flex">{{score}} out of 25</h3>
+            <h3 class="flex">{{ score }} out of 25</h3>
             <p>For more information, check out the <a href="https://security.googleblog.com/2015/07/new-research-comparing-how-security.html">Google Security blog post</a> that inspired this game, or <a href="https://www.us-cert.gov/ncas/tips/ST04-003">this article</a> from the United States Computer Emergency Readiness Team (US-CERT)'s <a href="https://www.us-cert.gov/ncas/tips">tips list</a>. You can also click on any of the advice in the <em>Security Experts' Top Online Safety Practices</em> chart to learn more about that topic.</p>
           </div>
           <div>
             <h3 class="flex">Security Experts' Top Online Safety Practices</h3>
             <ul class="list-group">
-              <li class="list-group-item" v-for="element in experts" :key="element.order">
-                <img :src="'images/' + element.order + '.jpg'" />
-                <div><a v-bind:href="element.link">{{element.name}}</a></div>
+              <li class="list-group-item" v-for="item in experts" :key="item.order">
+                <img :src="'images/' + item.order + '.jpg'" />
+                <div><a :href="item.link">{{ item.name }}</a></div>
               </li>
             </ul>
           </div>
         </div>
         <div class="buttons flex">
-          <button type="button" @click="resetLists">Play Again</button>
+          <button type="button" @click="reset">Play Again</button>
         </div>
       </div>
     </div>
@@ -68,127 +84,90 @@
 import draggable from "vuedraggable";
 
 // https://security.googleblog.com/2015/07/new-research-comparing-how-security.html
-const correct = [
-  "Install software updates",
-  "Use unique passwords",
-  "Use two-factor authentication",
-  "Use strong passwords",
-  "Use a password manager"
+const correctAnswers = [
+  { name: "Install software updates", link: "https://www.us-cert.gov/ncas/tips/ST04-006" },
+  { name: "Use unique passwords", link: "https://haveibeenpwned.com/Passwords" },
+  { name: "Use two-factor authentication", link: "https://twofactorauth.org/" },
+  { name: "Use strong passwords", link: "https://explainxkcd.com/wiki/index.php/936:_Password_Strength" },
+  { name: "Use a password manager", link: "https://www.theverge.com/2017/7/24/15921282/best-password-manager-1password-lastpass-dashlane-how-to" },
 ];
-const links = [
-  "https://www.us-cert.gov/ncas/tips/ST04-006",
-  "https://haveibeenpwned.com/Passwords",
-  "https://twofactorauth.org/",
-  "https://explainxkcd.com/wiki/index.php/936:_Password_Strength",
-  "https://www.theverge.com/2017/7/24/15921282/best-password-manager-1password-lastpass-dashlane-how-to"
-];
-const incorrect = [
+
+const incorrectAnswers = [
   "Use antivirus software",
   "Change passwords frequently",
   "Only visit websites you know",
   "Don't share personal information",
 ];
 
-// https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
-function fisherYates( array ){
-  var count = array.length,
-    randomnumber,
-    temp;
-  while( count ){
-    randomnumber = Math.random() * count-- | 0;
-    temp = array[count];
-    array[count] = array[randomnumber];
-    array[randomnumber] = temp
+const experts = correctAnswers.map((item, i) => ({
+  name: item.name,
+  order: i + 1,
+  link: item.link,
+}));
+
+function shuffle(array) {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.random() * (i + 1) | 0;
+    [array[i], array[j]] = [array[j], array[i]];
   }
+}
+
+function buildChoices() {
+  const all = [
+    ...correctAnswers.map((item, i) => ({ name: item.name, order: i + 1 })),
+    ...incorrectAnswers.map((name, i) => ({ name, order: correctAnswers.length + i + 1 })),
+  ];
+  shuffle(all);
+  return all;
 }
 
 export default {
   name: "SecuritySquabble",
-  components: {
-    draggable
-  },
+  components: { draggable },
   data() {
     return {
-      list: correct.concat(incorrect).map((name, index) => {
-        return { name, order: index + 1 };
-      }),
-      list2: [],
-      experts: correct.map((name, index) => {
-        return { name, order: index + 1, link: links[index] };
-      }),
-      editable: true,
-      isDragging: false,
-      delayedDragging: false,
-      score: 0
+      choices: buildChoices(),
+      answers: [],
+      scored: false,
+      score: 0,
     };
   },
   methods: {
-    calcScore() {
-      this.score = 0
-      for (var i=0, len=this.list2.length; i < len; i++) {
-        if (this.list2[i].order < 6) {
-          this.score += 5 - Math.abs(this.list2[i].order - (i + 1))
+    submitScore() {
+      this.score = this.answers.reduce((total, item, i) => {
+        if (item.order <= correctAnswers.length) {
+          return total + 5 - Math.abs(item.order - (i + 1));
         }
-      }
+        return total;
+      }, 0);
+      this.scored = true;
     },
-    resetLists() {
-      this.score = 0
-      this.list = correct.concat(incorrect).map((name, index) => {
-        return { name, order: index + 1 };
-      })
-      this.list2 = [];
-      fisherYates(this.list);
-    }
-  },
-  beforeMount() {
-    fisherYates(this.list)
+    reset() {
+      this.score = 0;
+      this.scored = false;
+      this.choices = buildChoices();
+      this.answers = [];
+    },
   },
   computed: {
-    dragOptions() {
-      return {
-        animation: 0,
-        group: {
-          name: "Squabble",
-          pull: this.list2.length < 5
-        },
-        disabled: !this.editable,
-        ghostClass: "ghost"
-      };
-    },
-    dragOptions2() {
-      return {
-        animation: 0,
-        group: {
-          name: "Squabble",
-          put: this.list2.length < 5
-        },
-        disabled: !this.editable,
-        ghostClass: "ghost"
-      };
-    },
     scoreable() {
-      return this.score == 0 && this.list2.length == 5;
-    }
+      return !this.scored && this.answers.length === 5;
+    },
+    experts() {
+      return experts;
+    },
   },
-  watch: {
-    isDragging(newValue) {
-      if (newValue) {
-        this.delayedDragging = true;
-        return;
-      }
-      this.$nextTick(() => {
-        this.delayedDragging = false;
-      });
-    }
-  }
 };
 </script>
 
 <style>
-* {
-  color: #111;
+body, h3, h4, p, ul, li {
   margin: 0;
   padding: 0;
+}
+
+body {
+  color: #111;
 }
 
 a, a:visited {
@@ -222,6 +201,8 @@ h4 {
 }
 
 li {
+  display: flex;
+  align-items: center;
   background: #eee;
   border: 2px solid black;
   cursor: move;
@@ -229,20 +210,15 @@ li {
   text-transform: uppercase;
 }
 
-li i {
-  cursor: pointer;
-}
-
 li:hover {
   background: #fff;
 }
 
 li > div {
-  align-items: center;
   display: flex;
+  align-items: center;
   height: 3rem;
   padding: 0 1rem;
-  width: calc(100% - 5rem);
 }
 
 li a, li a:hover, li a:visited {
@@ -251,13 +227,7 @@ li a, li a:hover, li a:visited {
 }
 
 li > img {
-  float: left;
   height: 3rem;
-}
-li::after {
-  clear: both;
-  content: "";
-  display: table;
 }
 
 p {
@@ -274,11 +244,11 @@ ul {
 
 .app {
   background: repeating-linear-gradient(
-  135deg,
-  #f2bf30,
-  #f2bf30 2rem,
-  black 2rem,
-  black 4rem
+    135deg,
+    #f2bf30,
+    #f2bf30 2rem,
+    black 2rem,
+    black 4rem
   );
   box-shadow: 0.2rem 0.2rem 0.1rem 0.1rem;
   padding: 1rem;
@@ -296,10 +266,6 @@ ul {
   align-items: center;
 }
 
-.flip-list-move {
-  transition: transform 0.5s;
-}
-
 .force-height {
   min-height: 10rem;
 }
@@ -315,17 +281,13 @@ ul {
   padding: 0 1rem;
 }
 
-.no-move {
-  transition: transform 0s;
-}
-
 .overlay {
   background: rgba(238, 238, 238, 0.95);
   height: 100%;
   left: 0;
   position: absolute;
   width: 100%;
-  top: 0px;
+  top: 0;
   z-index: 1000;
 }
 
@@ -335,20 +297,15 @@ ul {
 }
 
 .row {
+  display: flex;
+  flex-wrap: wrap;
   margin: 0 auto;
   padding: 0.5rem;
 }
 
-.row::after {
-  content: "";
-  clear: both;
-  display: table;
-}
-
 .row > div {
-  float: left;
+  flex: 1 1 100%;
   margin: 0.5rem;
-  width: calc(100% - 1rem);
 }
 
 .squabble {
@@ -362,9 +319,7 @@ ul {
     margin-top: -2px;
   }
   .row > div {
-    width: calc(50% - 1rem);
+    flex: 1 1 calc(50% - 1rem);
   }
 }
 </style>
-
-// vim: ai ts=2 sts=2 et sw=2

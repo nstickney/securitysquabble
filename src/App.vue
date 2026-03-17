@@ -6,7 +6,7 @@
 import SecuritySquabble from './components/SecuritySquabble.vue'
 
 export default {
-  name: 'app',
+  name: 'App',
   components: {
     SecuritySquabble
   }
@@ -32,5 +32,3 @@ body {
   }
 }
 </style>
-
-// vim: ai ts=2 sts=2 et sw=2
